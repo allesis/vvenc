@@ -421,8 +421,36 @@ VVENC_DECL void vvenc_vvencMCTF_default(vvencMCTF *vvencMCTF) {
   memset(vvencMCTF->MCTFStrengths, 0, sizeof(vvencMCTF->MCTFStrengths));
 }
 
-VVENC_DECL vvenc_config *vvenc_config_create(void) {
-  return (vvenc_config *)calloc(1, sizeof(vvenc_config));
+VVENC_DECL vvenc_data *vvenc_data_default(int width, int height, int fps,
+                                          int bitrate, int qp, int preset) {
+  vvenc_data *data = (vvenc_data *)calloc(1, sizeof(vvenc_data));
+
+  vvenc_config *config = (vvenc_config *)calloc(1, sizeof(vvenc_config));
+  data->config = config;
+
+  vvenc_init_default(config, width, height, fps, bitrate, qp,
+                     (vvencPresetMode)preset);
+
+  vvencEncoder *encoder = vvenc_encoder_create();
+  vvenc_encoder_open(encoder, config);
+
+  data->encoder = encoder;
+  vvencYUVBuffer *buffer = vvenc_YUVBuffer_alloc();
+  vvenc_YUVBuffer_alloc_buffer(buffer, config->m_internChromaFormat,
+                               config->m_SourceWidth, config->m_SourceHeight);
+
+  data->buffer = buffer;
+
+  vvencAccessUnit *au = vvenc_accessUnit_alloc();
+
+  const int auSizeScale =
+      config->m_internChromaFormat <= VVENC_CHROMA_420 ? 2 : 3;
+  vvenc_accessUnit_alloc_payload(
+      au, auSizeScale * config->m_SourceWidth * config->m_SourceHeight + 1024);
+
+  data->au = au;
+
+  return data;
 }
 
 VVENC_DECL void vvenc_config_default(vvenc_config *c) {

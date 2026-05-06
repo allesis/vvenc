@@ -897,8 +897,6 @@ typedef struct vvenc_config {
 
 } vvenc_config;
 
-VVENC_DECL vvenc_config *vvenc_config_create(void);
-
 /* vvenc_config_default
   This method initializes the vvenc_config parameters to default values
  (constructor).

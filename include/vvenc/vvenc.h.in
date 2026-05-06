@@ -39,7 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 
 ------------------------------------------------------------------------------------------- */
-/**
+/**vvenc_
   \file    vvenc.h
   \brief   This file contains the external interface of the vvenc SDK.
 */
@@ -205,6 +205,16 @@ typedef struct vvencAccessUnit
   void*           userData;            // user data passed in corresponding input YUV buffer
 #endif
 } vvencAccessUnit;
+
+typedef struct vvenc_data {
+  vvenc_config *config;
+  vvencEncoder *encoder;
+  vvencYUVBuffer *buffer;
+  vvencAccessUnit *au;
+} vvenc_data;
+
+VVENC_DECL vvenc_data *vvenc_data_default(int width, int height, int fps,
+                                          int bitrate, int qp, int preset);
 
 /* vvenc_accessUnit_alloc:
    Allocates a vvencAccessUnit instance.
