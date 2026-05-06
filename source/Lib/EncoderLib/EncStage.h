@@ -71,6 +71,7 @@ public:
   uint8_t          m_minNoiseLevels[QPA_MAX_NOISE_LEVELS];
   std::vector<int> m_ctuBimQpOffset;
   int              m_picAuxQpOffset; // auxiliary QP offset per frame, for combination of RC and BIM (and possibly other tools)
+  bool		   m_isExternalIFrame;
 
 private:
   PelStorage       m_origBuf;
@@ -93,6 +94,7 @@ public:
   , m_picMemorySTA   ( 0 )
   , m_picMotEstError ( 0 )
   , m_picAuxQpOffset ( 0 )
+  , m_isExternalIFrame ( false )
   , m_cts            ( 0 )
   , m_maxFrames      ( -1 )
   , m_poc            ( -1 )
@@ -146,6 +148,7 @@ public:
     m_isLead       = poc < 0;
     m_isTrail      = m_maxFrames > 0 && poc >= m_maxFrames;
     m_ctsValid     = yuvInBuf->ctsValid;
+    m_isExternalIFrame = yuvInBuf->isExternalIFrame;
     m_ctuBimQpOffset.resize( 0 );
     m_picMotEstError = 0;
     m_picAuxQpOffset = 0;
@@ -171,6 +174,7 @@ public:
     pic->ctsValid       = m_ctsValid;
     pic->gopEntry       = &m_gopEntry;
     pic->userData       = m_userData;
+    pic->m_picShared->m_isExternalIFrame = m_isExternalIFrame;
     incUsed();
   }
 

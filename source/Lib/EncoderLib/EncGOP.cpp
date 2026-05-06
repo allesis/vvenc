@@ -2482,7 +2482,12 @@ void EncGOP::xWritePicture( Picture& pic, AccessUnitList& au, bool isEncodeLtRef
 
   pic.actualTotalBits += xWriteParameterSets( pic, au, m_HLSWriter );
   xWriteLeadingSEIs( pic, au );
-  pic.actualTotalBits += xWritePictureSlices( pic, au, m_HLSWriter );
+
+  // We have an external IFRAME so don't encode it
+  if (!pic.m_picShared->m_isExternalIFrame) {
+	  pic.actualTotalBits += xWritePictureSlices( pic, au, m_HLSWriter );
+	  pic.m_picShared->m_isExternalIFrame = false;
+  }
 
   pic.encTime.stopTimer();
 

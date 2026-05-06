@@ -177,6 +177,7 @@ public:
     dtsValid      = false;
     rap           = false;
     refPic        = false;
+    isExternalIFrame = false;
     InfoString.clear();
     userData      = nullptr;
 
@@ -203,6 +204,7 @@ public:
   bool            rap;                                    ///< random access point flag
   bool            refPic;                                 ///< reference picture
   std::string     InfoString;
+  bool 		  isExternalIFrame;
   void*           userData;                               ///< user data passed in corresponding input YUV buffer
 };
 
